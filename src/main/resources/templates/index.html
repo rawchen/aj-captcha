@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>滑动验证后端校验</title>
+    <link rel="Shortcut Icon" th:href="@{/images/favicon.png}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/verify.css}">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/crypto-js.js}"></script>
+    <script type="text/javascript" th:src="@{/js/ase.js}"></script>
+    <script type="text/javascript" th:src="@{/js/verify.js}"></script>
+</head>
+<body>
+<div id="content"></div>
+后台验证用户名123，密码456，所有提示结果F12看控制台输出
+<p>
+<label for="username">用户名</label><input id="username">
+<label for="password">密码</label><input id="password">
+<p>
+<button id="btn">点击弹窗验证</button>
+</body>
+<script>
+    $('#content').slideVerify({
+        baseUrl: 'http://127.0.0.1:8070',  //服务器请求地址
+        containerId: 'btn',//pop模式 必填 被点击之后出现行为验证码的元素id
+        mode: 'pop',     //展示模式
+        imgSize: {       //图片的大小对象,有默认值{ width: '310px',height: '155px'},可省略
+            width: '400px',
+            height: '200px',
+        },
+        barSize: {          //下方滑块的大小对象,有默认值{ width: '310px',height: '50px'},可省略
+            width: '400px',
+            height: '40px',
+        },
+        beforeCheck: function () {  //检验参数合法性的函数  mode ="pop"有效
+            //实现: 参数合法性的判断逻辑, 返回一个boolean值
+            return true
+        },
+        ready: function () {
+        },  //加载完毕的回调
+        success: function (params) { //成功的回调
+            // params为返回的二次验证参数 需要在接下来的实现逻辑回传服务器
+           console.log("ajParams: " + JSON.stringify(params))
+            $.ajax({
+                url: '/login',
+                type: 'post',
+                data: {"captchaVerification": params.captchaVerification, "userName": $('#username').val(), "password": $('#password').val()},
+                success: function (res) {
+                    console.log("success：", JSON.stringify(res));
+                }
+            });
+        },
+        error: function () {
+            console.log("前台验证错误", new Date().getTime());
+        }
+    });
+</script>
+</html>

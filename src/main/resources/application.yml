@@ -1,0 +1,31 @@
+server:
+  port: 8070
+
+spring:
+  application:
+    name: AJCaptcha
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
+
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+
+  mvc:
+    # 用于静态资源的路径模式，默认为/**
+    static-path-pattern: /**
+aj:
+  captcha:
+    # 无需加水印
+    water-mark:
+    # 一分钟内接口请求次数限制开关
+#    req-frequency-limit-enable: true
+    # 一分钟内check接口失败次数
+#    req-get-lock-limit: 5
