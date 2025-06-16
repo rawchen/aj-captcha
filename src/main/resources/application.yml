@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: AJCaptcha
+    name: aj-captcha
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
